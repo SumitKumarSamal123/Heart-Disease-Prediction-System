@@ -256,7 +256,7 @@ if st.session_state.prediction_done:
 
     shap_df["Effect"] = shap_df["Contribution"].apply(get_effect)
 
-    shap_df = (shap_df.sort_values("Impact", ascending=False).head(10))
+    shap_df = (shap_df.sort_values("Impact", ascending=False).head(10).reset_index(drop=True))
 
     st.dataframe(shap_df[["Feature", "Effect"]],width="stretch")
 
