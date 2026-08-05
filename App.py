@@ -3,7 +3,7 @@ import pandas as pd
 import joblib 
 from datetime import datetime
 import os
-#import shap
+import shap
 import matplotlib.pyplot as plt 
 
 model = joblib.load("logistic_regression_heart.pkl")
