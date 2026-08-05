@@ -10,8 +10,8 @@ model = joblib.load("logistic_regression_heart.pkl")
 scaler = joblib.load("scaler.pkl")
 expected_columns = joblib.load("columns.pkl")
 heart_df = pd.read_csv("heart.csv")
-#background_data = joblib.load("background_data.pkl")
-#explainer = shap.LinearExplainer(model,background_data)
+background_data = joblib.load("background_data.pkl")
+explainer = shap.LinearExplainer(model,background_data)
 feature_names = joblib.load("feature_names.pkl")
 
 #User friendly names
@@ -141,8 +141,8 @@ if predict:
     prediction = model.predict(scaled_input)[0]
     probability = model.predict_proba(scaled_input)[0][1]
     # Generate SHAP values
-    #shap_values = explainer.shap_values(scaled_input)
-    #st.session_state.shap_values = shap_values
+    shap_values = explainer.shap_values(scaled_input)
+    st.session_state.shap_values = shap_values
     st.session_state.prediction = prediction
     st.session_state.probability = probability  
 
@@ -240,30 +240,30 @@ if st.session_state.prediction_done:
         st.write("•", reason)
 
     #SHAP
-    #st.markdown("---")
-    #st.subheader("🧠 AI Model Explanation (SHAP)")
-    #shap_df = pd.DataFrame({"Feature": expected_columns,"Contribution": st.session_state.shap_values[0]})
-    #shap_df["Feature"] = shap_df["Feature"].map(lambda x: feature_map.get(x, x))
-    #shap_df["Impact"] = shap_df["Contribution"].abs()
+    st.markdown("---")
+    st.subheader("🧠 AI Model Explanation (SHAP)")
+    shap_df = pd.DataFrame({"Feature": expected_columns,"Contribution": st.session_state.shap_values[0]})
+    shap_df["Feature"] = shap_df["Feature"].map(lambda x: feature_map.get(x, x))
+    shap_df["Impact"] = shap_df["Contribution"].abs()
 
-    #def get_effect(value):
-    #    if value > 0:
-    #        return f"🔴 Increased Risk (+{value:.3f})"
-    #    elif value < 0:
-    #        return f"🟢 Reduced Risk ({value:.3f})"
-    #    else:
-    #        return "⚪ No Significant Effect"
+    def get_effect(value):
+        if value > 0:
+            return f"🔴 Increased Risk (+{value:.3f})"
+        elif value < 0:
+            return f"🟢 Reduced Risk ({value:.3f})"
+        else:
+            return "⚪ No Significant Effect"
 
-    #shap_df["Effect"] = shap_df["Contribution"].apply(get_effect)
+    shap_df["Effect"] = shap_df["Contribution"].apply(get_effect)
 
-    #shap_df = (shap_df.sort_values("Impact", ascending=False).head(10))
+    shap_df = (shap_df.sort_values("Impact", ascending=False).head(10))
 
-    #st.dataframe(shap_df[["Feature", "Effect"]],width="stretch")
+    st.dataframe(shap_df[["Feature", "Effect"]],width="stretch")
 
-    #st.info(
-    #"🔍 Features marked in red increased the predicted heart disease risk, "
-    #"while features marked in green reduced the predicted risk. "
-    #"These explanations are generated directly from the Machine Learning model using SHAP.")
+    st.info(
+    "🔍 Features marked in red increased the predicted heart disease risk, "
+    "while features marked in green reduced the predicted risk. "
+    "These explanations are generated directly from the Machine Learning model using SHAP.")
     
     #Disclaimer
     st.warning(

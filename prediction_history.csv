@@ -1,0 +1,2 @@
+Date,Time,Age,Sex,Chest Pain,Resting BP,Cholesterol,Fasting BS,Resting ECG,Max HR,Exercise Angina,Oldpeak,ST Slope,Prediction,Probability
+05-08-2026,10:32:50 PM,40,M,ATA,120,200,0,Normal,150,Y,1.0,Up,💀Very High Risk💀,99.59%
